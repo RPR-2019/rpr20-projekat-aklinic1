@@ -116,6 +116,7 @@ public class Korisnik {
         if(spol.equals("Muško")) this.spol = Spol.MUSKO;
         else this.spol = Spol.ZENSKO;
     }
+
     public StarosnaKateogrija dajStarosnuKateogriju(){
         int godine = dajGodine();
 

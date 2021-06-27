@@ -11,15 +11,10 @@ public class Proizvod {
     private Integer popust = 0;
     private Integer kolicina;
     private String detaljneInformacije;
-//    slika
+    //    slika
     private Set<Tag> tagovi = new HashSet<>();
 
     public Proizvod() {
-    }
-    public Proizvod(String naziv, Double cijena, Integer kolicina) {
-        this.naziv = naziv;
-        this.cijena = cijena;
-        this.kolicina = kolicina;
     }
 
     public Double dajCijenuSaPopustom(){
