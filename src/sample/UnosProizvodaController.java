@@ -19,64 +19,75 @@ import java.util.Set;
 
 public class UnosProizvodaController {
     private ObservableList<Tag> tagovi;
-    private ObservableList<Integer> kolicine = FXCollections.observableArrayList();
     private CrmDAO dao;
     private Set<Tag> izabraniTagovi = new HashSet<>();
     private Set<Tag> tagoviZaPrikaz;
 
     public ListView<Tag> listTagovi;
-    public TextField txtNaziv, txtBrend, txtCijena, txtTag;
+    public TextField txtNaziv, txtBrend, txtCijena, txtTag, txtKolicina;
     public TextArea txtInformacije;
-    public ChoiceBox<Integer> choiceKolicina;
     public FlowPane flowPane;
-    public Proizvod proizvod = null;
+    public Proizvod proizvod;
+    public Button btnDodaj;
 
     public Proizvod getProizvod() {
         return proizvod;
     }
 
-    public UnosProizvodaController(Set<Tag> tagovi, CrmDAO dao){
+    public UnosProizvodaController(Set<Tag> tagovi, CrmDAO dao, Proizvod proizvod){
+        this.proizvod = proizvod;
         this.dao = dao;
         tagoviZaPrikaz = tagovi;
         this.tagovi = FXCollections.observableArrayList();
         for(Tag tag: tagovi) {
             this.tagovi.add(tag);
         }
-        int i;
-        for(i = 0; i < 50; i++){
-            kolicine.add(i);
-        }
     }
 
     @FXML
     public void initialize(){
-        choiceKolicina.setItems(kolicine);
+        if(proizvod != null) btnDodaj.setText("Izmijeni");
         listTagovi.setItems(this.tagovi);
         listTagovi.setOnMouseClicked( click -> {
             if(click.getClickCount() == 2){
                 Tag izabraniTag = listTagovi.getSelectionModel().getSelectedItem();
                 int duzina = izabraniTagovi.size();
                 izabraniTagovi.add(izabraniTag);
-                if(duzina != izabraniTagovi.size()) {        //Provjeravamo da li je ovaj tag vec izabran
-                    Image image = new javafx.scene.image.Image("delete.png");
-                    ImageView imageView = new ImageView(image);
-                    Button tag = new Button(izabraniTag.getNaziv());
-                    tag.setContentDisplay(ContentDisplay.RIGHT);
-                    imageView.setFitHeight(20);
-                    imageView.setFitWidth(20);
-                    tag.setGraphic(imageView);
-                    tag.setStyle("   -fx-border-width: 2;" +
-                            "        -fx-border-color: DeepSkyBlue;" +
-                            "        -fx-border-radius: 4;" +
-                            "        -fx-background-color: f1f1f1;" +
-                            "        -fx-border-insets: 5;");
-                    tag.setOnAction(actionEvent -> {
-                        flowPane.getChildren().remove(tag);
-                    });
-                    flowPane.getChildren().add(tag);
+                if(duzina != izabraniTagovi.size())   {    //Provjeravamo da li je ovaj tag vec izabran
+                    flowPane.getChildren().add(dajTag(izabraniTag.getNaziv()));
                 }
+
             }
         });
+        if(proizvod != null){
+            txtNaziv.setText(proizvod.getNaziv());
+            txtCijena.setText(String.valueOf(proizvod.getCijena()));
+            txtBrend.setText(proizvod.getBrend());
+            txtInformacije.setText(proizvod.getDetaljneInformacije());
+            txtKolicina.setText(String.valueOf(proizvod.getKolicina()));
+            for(Tag t: proizvod.getTagovi()){
+                flowPane.getChildren().add(dajTag(t.getNaziv()));
+            }
+        }
+    }
+
+    public Button dajTag(String naziv){
+        Image image = new javafx.scene.image.Image("delete.png");
+        ImageView imageView = new ImageView(image);
+        Button tag = new Button(naziv);
+        tag.setContentDisplay(ContentDisplay.RIGHT);
+        imageView.setFitHeight(20);
+        imageView.setFitWidth(20);
+        tag.setGraphic(imageView);
+        tag.setStyle("   -fx-border-width: 2;" +
+                "        -fx-border-color: DeepSkyBlue;" +
+                "        -fx-border-radius: 4;" +
+                "        -fx-background-color: f1f1f1;" +
+                "        -fx-border-insets: 5;");
+        tag.setOnAction(actionEvent -> {
+            flowPane.getChildren().remove(tag);
+        });
+        return tag;
     }
 
     public void actionDodaj(ActionEvent actionEvent){
@@ -84,6 +95,7 @@ public class UnosProizvodaController {
         boolean unosCijene = true;
         try {
             Double.parseDouble(cijena);
+            Integer.parseInt(txtKolicina.getText());
         }catch (Exception e){
             unosCijene = false;
         }
@@ -103,11 +115,11 @@ public class UnosProizvodaController {
             }
         }
         else {
-            proizvod = new Proizvod();
+            if(proizvod == null) proizvod = new Proizvod();
             proizvod.setNaziv(txtNaziv.getText());
             proizvod.setBrend(txtBrend.getText());
             proizvod.setCijena(Double.parseDouble(cijena));
-            proizvod.setKolicina(choiceKolicina.getValue());
+            proizvod.setKolicina(Integer.parseInt(txtKolicina.getText()));
             proizvod.setDetaljneInformacije(txtInformacije.getText());
             proizvod.setTagovi(izabraniTagovi);
             Stage stage = (Stage) txtNaziv.getScene().getWindow();

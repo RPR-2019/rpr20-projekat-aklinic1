@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.stage.Stage;
@@ -13,6 +14,14 @@ import java.awt.*;
 
 public class UnosKorisnikaController {
 
+
+    public UnosKorisnikaController() {
+    }
+
+    public UnosKorisnikaController(Korisnik korisnik){
+        this.korisnik = korisnik;
+    }
+
     public ObservableList<String> polovi = FXCollections.observableArrayList();
     public Korisnik korisnik = null;
     public TextField txtIme;
@@ -20,12 +29,24 @@ public class UnosKorisnikaController {
     public TextField txtEmail;
     public DatePicker datePicker;
     public ChoiceBox choiceSpol;
+    public Button btnDodaj;
 
     @FXML
     public void initialize(){
         polovi.add("Muško");
         polovi.add("Žensko");
         choiceSpol.setItems(polovi);
+        if(korisnik != null){
+            btnDodaj.setText("Izmijeni");
+            txtIme.setText(korisnik.getIme());
+            txtPrezime.setText(korisnik.getPrezime());
+            txtEmail.setText(korisnik.getEmail());
+            datePicker.setValue(korisnik.getDatumRodjenja());
+            if(korisnik.getSpol().equals("Žensko"))
+                choiceSpol.getSelectionModel().selectLast();
+            else choiceSpol.getSelectionModel().selectFirst();
+
+        }
     }
 
     public void actionOdustani(ActionEvent actionEvent){
@@ -54,7 +75,7 @@ public class UnosKorisnikaController {
             else choiceSpol.requestFocus();
         }
         else{
-            korisnik = new Korisnik();
+            if(korisnik == null) korisnik = new Korisnik();
             korisnik.setIme(txtIme.getText());
             korisnik.setPrezime(txtPrezime.getText());
             korisnik.setEmail(txtEmail.getText());

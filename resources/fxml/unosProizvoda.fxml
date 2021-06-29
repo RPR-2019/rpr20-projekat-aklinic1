@@ -5,23 +5,23 @@
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="452.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="10.0" prefWidth="133.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="371.0" minWidth="10.0" />
+    <ColumnConstraints hgrow="SOMETIMES" />
+    <ColumnConstraints hgrow="SOMETIMES" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="4.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="45.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="140.0" minHeight="10.0" prefHeight="111.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="40.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="128.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
     <RowConstraints maxHeight="154.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="176.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label prefHeight="17.0" prefWidth="119.0" text="Naziv:">
+      <Label text="Naziv:">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="15.0" />
          </GridPane.margin>
@@ -29,7 +29,7 @@
             <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
          </padding>
       </Label>
-      <TextField fx:id="txtNaziv" prefHeight="41.0" prefWidth="312.0" GridPane.columnIndex="1">
+      <TextField fx:id="txtNaziv" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets bottom="5.0" left="15.0" right="15.0" top="15.0" />
          </GridPane.margin>
@@ -37,7 +37,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </TextField>
-      <Label prefHeight="27.0" prefWidth="132.0" text="Detaljne informacije:" GridPane.rowIndex="2">
+      <Label text="Detaljne informacije:" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin>
@@ -45,7 +45,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Label>
-      <TextArea fx:id="txtInformacije" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <TextArea fx:id="txtInformacije" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
          </GridPane.margin>
@@ -53,7 +53,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </TextArea>
-      <HBox prefHeight="61.0" prefWidth="491.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <HBox GridPane.columnSpan="2" GridPane.rowIndex="3">
          <children>
             <Label prefHeight="27.0" prefWidth="68.0" text="Cijena:">
                <HBox.margin>
@@ -63,7 +63,7 @@
                   <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <TextField fx:id="txtCijena" prefHeight="27.0" prefWidth="57.0">
+            <TextField fx:id="txtCijena" prefWidth="57.0">
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -79,16 +79,19 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
-            <ChoiceBox fx:id="choiceKolicina" prefHeight="25.0" prefWidth="60.0">
+            <TextField fx:id="txtKolicina" prefWidth="98.0">
                <HBox.margin>
-                  <Insets bottom="5.0" left="30.0" right="5.0" top="5.0" />
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
-            </ChoiceBox>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </TextField>
          </children>
       </HBox>
-      <HBox prefHeight="40.0" prefWidth="491.0" GridPane.columnSpan="2" GridPane.rowIndex="5">
+      <HBox GridPane.columnSpan="2" GridPane.rowIndex="5">
          <children>
-            <TextField fx:id="txtTag" prefHeight="25.0" prefWidth="159.0" promptText="Ovdje unesite novi tag..">
+            <TextField fx:id="txtTag" promptText="Ovdje unesite novi tag..">
                <HBox.margin>
                   <Insets bottom="5.0" left="30.0" right="5.0" top="5.0" />
                </HBox.margin>
@@ -99,7 +102,7 @@
                </HBox.margin>
             </Button>
          </children></HBox>
-      <Label prefHeight="17.0" prefWidth="71.0" text="Brend:" GridPane.rowIndex="1">
+      <Label text="Brend:" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin>
@@ -107,7 +110,7 @@
             <Insets bottom="5.0" left="15.0" right="5.0" top="5.0" />
          </padding>
       </Label>
-      <TextField fx:id="txtBrend" prefHeight="27.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <TextField fx:id="txtBrend" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
          </GridPane.margin>
@@ -115,7 +118,7 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </TextField>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
+      <ButtonBar GridPane.columnIndex="1" GridPane.rowIndex="7">
         <buttons>
           <Button fx:id="btnOdustani" cancelButton="true" mnemonicParsing="false" onAction="#actionOdustani" prefHeight="29.0" prefWidth="80.0" text="Odustani">
                <padding>
@@ -134,14 +137,14 @@
          <GridPane.margin>
             <Insets left="5.0" right="5.0" />
          </GridPane.margin></Separator>
-      <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="4">
+      <HBox GridPane.columnSpan="2" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </GridPane.margin>
          <children>
-            <VBox prefHeight="121.0" prefWidth="174.0">
+            <VBox prefHeight="121.0">
                <children>
-                  <Label prefHeight="23.0" prefWidth="164.0" text="Dvoklikom odaberite tag:">
+                  <Label text="Dvoklikom odaberite tag:">
                      <VBox.margin>
                         <Insets bottom="2.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin>

@@ -7,21 +7,13 @@ import java.util.ArrayList;
 
 public class Korisnik {
 
-    public enum Spol{
 
-        MUSKO("musko"),
-        ZENSKO("zensko");
 
-        private String naziv;
-
-        Spol(String naziv) {
-            this.naziv = naziv;
-        }
-
-        public String getNaziv() {
-            return naziv;
-        }
+    @Override
+    public String toString() {
+        return ime + " " + prezime;
     }
+
     public enum StarosnaKateogrija{
         BEBA,
         DIJETE,
@@ -29,14 +21,12 @@ public class Korisnik {
         ZREO,
         SENIOR
     }
-
+    private String spol;
     private String ime;
     private String prezime;
     private String email;
     private LocalDate datumRodjenja;
-    private ArrayList<Proizvod> kupljeniProizvodi = new ArrayList<>();
     private int id;
-    private Spol spol;
 
     public Korisnik() {
     }
@@ -47,8 +37,7 @@ public class Korisnik {
         this.email = email;
         this.datumRodjenja = datumRodjenja;
         this.id = id;
-        if(spol.equals("Muško")) this.spol = Spol.MUSKO;
-        else this.spol = Spol.ZENSKO;
+        this.spol = spol;
     }
 
     public Korisnik(String ime, String prezime, String email, LocalDate datumRodjenja) {
@@ -109,14 +98,12 @@ public class Korisnik {
     }
 
     public String getSpol() {
-        return spol.getNaziv();
+        return spol;
     }
 
     public void setSpol(String spol) {
-        if(spol.equals("Muško")) this.spol = Spol.MUSKO;
-        else this.spol = Spol.ZENSKO;
+        this.spol = spol;
     }
-
     public StarosnaKateogrija dajStarosnuKateogriju(){
         int godine = dajGodine();
 

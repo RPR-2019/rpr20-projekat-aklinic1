@@ -13,7 +13,8 @@ public class CrmDAO {
     private Connection connection;
 
     private PreparedStatement dajKorisnikeUpit, dodajKorisnikaUpit, dajIdZadnjegKorisnikaUpit, izbrisiKorisnikaUpit,
-        dajProizvodeUpit, dodajProizvodUpit, izbrisiProizvodUpit, dajIDZadnjegProizvodaUpit;
+        dajProizvodeUpit, dodajProizvodUpit, izbrisiProizvodUpit, dajIDZadnjegProizvodaUpit, izmijeniKorisnikaUpit,
+        izmijeniProizvodUpit, dajKupovineUpit, dodajKupovinuUpit;
     private PreparedStatement dajTagoveUpit, dodajTagUpit;
 
     public static CrmDAO getInstance(){
@@ -29,7 +30,7 @@ public class CrmDAO {
         }
         try{
             dajKorisnikeUpit = connection.prepareStatement("SELECT * FROM korisnici");
-            dodajKorisnikaUpit = connection.prepareStatement("INSERT INTO korisnici VALUES(?, ?, ?, ?, ?, ?, ?)");
+            dodajKorisnikaUpit = connection.prepareStatement("INSERT INTO korisnici VALUES(?, ?, ?, ?, ?, ?)");
             dajIdZadnjegKorisnikaUpit = connection.prepareStatement("SELECT MAX(ID) FROM korisnici");
             izbrisiKorisnikaUpit = connection.prepareStatement("DELETE FROM korisnici WHERE id=?");
             dajProizvodeUpit = connection.prepareStatement("SELECT * FROM proizvodi");
@@ -39,10 +40,80 @@ public class CrmDAO {
             dajTagoveUpit = connection.prepareStatement("SELECT * FROM tagovi");
             dodajTagUpit = connection.prepareStatement("INSERT INTO tagovi VALUES(?)");
             izbrisiProizvodUpit = connection.prepareStatement("DELETE FROM proizvodi WHERE id=?");
+            izmijeniKorisnikaUpit = connection.prepareStatement("UPDATE korisnici SET Ime=?, Prezime=?, Email=?, " +
+                    "Datum=?, Spol =? WHERE ID=?");
+            izmijeniProizvodUpit = connection.prepareStatement("UPDATE proizvodi SET Naziv=?, Brend=?, Cijena=?, " +
+                    "Kolicina=?, Popust=?, Informacije=?, Tagovi=? WHERE ID=?");
+            dajKupovineUpit = connection.prepareStatement("SELECT * FROM kupovine");
+            dodajKupovinuUpit = connection.prepareStatement("INSERT INTO kupovine VALUES(?,?,?)");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
+
+    public void dodajKupovinu(Kupovina kupovina){
+        try {
+            dodajKupovinuUpit.setInt(1, kupovina.getKorisnik().getId());
+            dodajKupovinuUpit.setInt(2, kupovina.getProizvod().getId());
+            dodajKupovinuUpit.setString(3, kupovina.getDatumKupovine().toString());
+            dodajKupovinuUpit.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public Kupovina dajKupovinu(ResultSet rs){
+        Kupovina kupovina = null;
+        try {
+            kupovina =  new Kupovina(rs.getInt(1), rs.getInt(2),
+                    LocalDate.parse(rs.getString(3)));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return kupovina;
+    }
+    public ArrayList<Kupovina> dajKupovine(){
+        ArrayList<Kupovina> list = new ArrayList<>();
+        try {
+            ResultSet rs = dajKupovineUpit.executeQuery();
+            while(rs.next()){
+                list.add(dajKupovinu(rs));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
+    }
+
+
+    public void izmijeniProizvod(Proizvod proizvod){
+        try{
+            izmijeniProizvodUpit.setString(1, proizvod.getNaziv());
+            izmijeniProizvodUpit.setString(2, proizvod.getBrend());
+            izmijeniProizvodUpit.setDouble(3, proizvod.getCijena());
+            izmijeniProizvodUpit.setInt(4, proizvod.getKolicina());
+            izmijeniProizvodUpit.setInt(5, proizvod.getPopust());
+            izmijeniProizvodUpit.setString(6, proizvod.getDetaljneInformacije());
+            izmijeniProizvodUpit.setString(7, proizvod.getTagoviJSON().toString());
+            izmijeniProizvodUpit.setInt(8, proizvod.getId());
+            izmijeniProizvodUpit.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+    public void izmijeniKorisnika(Korisnik korisnik){
+        try{
+            izmijeniKorisnikaUpit.setString(1, korisnik.getIme());
+            izmijeniKorisnikaUpit.setString(2, korisnik.getPrezime());
+            izmijeniKorisnikaUpit.setString(3, korisnik.getEmail());
+            izmijeniKorisnikaUpit.setString(4, korisnik.getDatumIspis());
+            izmijeniKorisnikaUpit.setString(5, korisnik.getSpol());
+            izmijeniKorisnikaUpit.setInt(6, korisnik.getId());
+            izmijeniKorisnikaUpit.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
     private Korisnik dajKorisnika(ResultSet rs) {
         Korisnik korisnik = null;
         try {
@@ -51,7 +122,7 @@ public class CrmDAO {
             ime = rs.getString(2);
             prezime = rs.getString(3);
             email = rs.getString(4);
-            spol = rs.getString(5);
+            spol = rs.getString(6);
 
             datumRodjenja = rs.getString(5);
             LocalDate datum = null;
@@ -78,12 +149,18 @@ public class CrmDAO {
             proizvod.setKolicina(rs.getInt(5));
             proizvod.setPopust(rs.getInt(6));
             proizvod.setDetaljneInformacije(rs.getString(7));
-            JSONArray tagoviJSON = new JSONArray(rs.getInt(8));
-            Set<Tag> tagovi = new HashSet<>();
-            for(Object o: tagoviJSON){
-                tagovi.add((Tag) o);
+            if(rs.getString(8) != null) {
+                if(!rs.getString(8).isEmpty()) {
+                    JSONArray tagoviJSON = new JSONArray(rs.getString(8));
+
+                    Set<Tag> tagovi = new HashSet<>();
+                    int i = 0;
+                    for (i = 0; i < tagoviJSON.length(); i++) {
+                        tagovi.add(new Tag(tagoviJSON.getString(i)));
+                    }
+                    proizvod.setTagovi(tagovi);
+                }
             }
-            proizvod.setTagovi(tagovi);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -135,10 +212,7 @@ public class CrmDAO {
         dodajProizvodUpit.setInt(5, proizvod.getKolicina());
         dodajProizvodUpit.setInt(6, proizvod.getPopust());
         dodajProizvodUpit.setString(7, proizvod.getDetaljneInformacije());
-        JSONArray array = new JSONArray();
-        for(Tag tag: proizvod.getTagovi())
-            array.put(tag.getNaziv());
-        dodajProizvodUpit.setString(8, array.toString());
+        dodajProizvodUpit.setString(8,  proizvod.getTagoviJSON().toString());
 
         dodajProizvodUpit.executeUpdate();
     }
